@@ -24,6 +24,20 @@
             </el-menu-item>
           </router-link> -->
 
+          <router-link to="/usersManage">
+            <el-menu-item index="9" class="menu-item-centered">
+              <span style="color: #ffffff">用户管理</span>
+            </el-menu-item>
+          </router-link>
+          
+                    <!-- 条件渲染用户管理菜单项 -->
+                    <!-- <router-link v-if="creatorId === 'admin'" to="/usersManage">
+            <el-menu-item index="9" class="menu-item-centered">
+              <span style="color: #ffffff">用户管理</span>
+            </el-menu-item>
+          </router-link>
+           -->
+
         </el-menu>
       </el-scrollbar>
     </el-aside>
