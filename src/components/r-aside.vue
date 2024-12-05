@@ -12,17 +12,11 @@
             </el-menu-item>
           </router-link>
           
-          <!-- <router-link to="/reportStatistics">
+          <router-link to="/advocacyInfo">
             <el-menu-item index="1" class="menu-item-centered">
-              <span style="color: #ffffff">项目统计</span>
+              <span style="color: #ffffff">宣传信息</span>
             </el-menu-item>
           </router-link>
-
-          <router-link to="/projectInfo">
-            <el-menu-item index="2" class="menu-item-centered">
-              <span style="color: #ffffff">项目概要</span>
-            </el-menu-item>
-          </router-link> -->
 
           <router-link to="/usersManage">
             <el-menu-item index="9" class="menu-item-centered">
