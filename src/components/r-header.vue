@@ -1,7 +1,7 @@
 <template>
   <div class="header-container">
     <div class="header-left">
-      项目信息管理系统
+      《好乡镇》系统平台
     </div>
     <div class="header-welcome">
       你好！{{ name }}
@@ -32,7 +32,7 @@ export default {
     }
   },
   created() {
-    this.name = localStorage.getItem('username')
+    this.name = localStorage.getItem('bname')
   },
   methods: {
     handleLogout() {

@@ -32,11 +32,13 @@
 
 <script setup>
 
+import carouselImg1 from '@/assets/img/carousel1.jpg';
 import carouselImg2 from '@/assets/img/carousel2.jpg';
 import carouselImg3 from '@/assets/img/carousel3.jpg';
 
 const imageList = [
  
+  { src: carouselImg1 },
   { src: carouselImg2 },
   { src: carouselImg3 },
   // Add more images as needed

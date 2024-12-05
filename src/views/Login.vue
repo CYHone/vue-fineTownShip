@@ -113,8 +113,10 @@
             localStorage.setItem('uname', response.data.data.uname)
             localStorage.setItem('bname', response.data.data.bname)
             localStorage.setItem('userLevel', response.data.data.userLevel)
-            
-            router.push('/index')
+          
+            setTimeout(() => {
+              router.push('/home')
+            }, 500);
           } else {
             // 如果 code 不为 200 或 success 为 false，显示错误消息
             ElMessage({ type: 'error', message: response.data.msg || '登录失败' })
