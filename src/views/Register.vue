@@ -145,7 +145,10 @@ const register = () => {
           if (response.data.code === 200 && response.data.success) {
             ElMessage({ type: 'success', message: '注册成功' })
             
-            router.push('/login')
+            // 延迟 1 秒后跳转到登录页面
+            setTimeout(() => {
+              router.push('/login');
+            }, 1000);
           } else {
             // 如果 code 不为 200 或 success 为 false，显示错误消息
             ElMessage({ type: 'error', message: response.data.msg || '注册失败' })
