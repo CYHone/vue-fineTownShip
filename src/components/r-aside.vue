@@ -26,7 +26,7 @@
 
           <router-link to="/usersManage">
             <el-menu-item index="9" class="menu-item-centered">
-              <span style="color: #ffffff">用户管理</span>
+              <span style="color: #ffffff">个人信息</span>
             </el-menu-item>
           </router-link>
           

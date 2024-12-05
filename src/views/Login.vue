@@ -14,7 +14,7 @@
           <el-input placeholder="请输入用户名" v-model="ruleForm.uname" autocomplete="off" />
         </el-form-item>
         <el-form-item label="密码：" prop="bpwd" style="width: 420px;">
-          <el-input placeholder="请输入密码" v-model="ruleForm.bpwd" type="bpwd" autocomplete="off" />
+          <el-input placeholder="请输入密码" v-model="ruleForm.bpwd" type="password" autocomplete="off" />
         </el-form-item>
   
         <el-form-item label="验证码" prop="sidentifyMode" style="width: 500px">
@@ -109,6 +109,7 @@
             ElMessage({ type: 'success', message: '登录成功' })
             
             // 保存用户信息到 localStorage
+            localStorage.setItem('id', response.data.data.id)
             localStorage.setItem('uname', response.data.data.uname)
             localStorage.setItem('bname', response.data.data.bname)
             localStorage.setItem('userLevel', response.data.data.userLevel)
