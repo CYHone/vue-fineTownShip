@@ -93,7 +93,7 @@ import { useRouter } from 'vue-router';
 
 const projects = ref([]);
 const totalNum = ref(0);
-const pageSize = ref(10);
+const pageSize = ref(5);
 const currentPage = ref(1);
 const dialogUpdateVisible = ref(false);
 const updateForm = ref({});
