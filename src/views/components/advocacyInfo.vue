@@ -14,7 +14,7 @@
       <el-table-column label="图片" width="200">
         <template #default="scope">
           <img
-          :src="`http://127.0.0.1:8080/${scope.row.pfileList}`"
+          :src="getImageUrl(scope.row.pfileList)"
           alt="宣传图片"
           style="width: 100px; height: auto;"
         />
@@ -55,6 +55,7 @@
 import { ref, onMounted } from "vue";
 import axios from "@/utils/axios-config";
 import { ElNotification } from "element-plus";
+import { getImageUrl } from "@/utils/url-utils";
 
 export default {
   setup() {
@@ -140,6 +141,7 @@ export default {
       handleUpdate,
       handleDelete,
       handleSizeChange,
+      getImageUrl,
     };
   },
 };
