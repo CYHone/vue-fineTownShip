@@ -28,6 +28,11 @@
               <span style="color: #ffffff">助力查询</span>
             </el-menu-item>
           </router-link>
+          <router-link to="/queryWaitHandle">
+            <el-menu-item index="3" class="menu-item-centered">
+              <span style="color: #ffffff">助力待处理</span>
+            </el-menu-item>
+          </router-link>
 
 
           <router-link to="/usersManage">
