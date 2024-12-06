@@ -2,7 +2,7 @@
     <div>
       <span style="font-size: 30px; font-weight: bold; padding-right: 50px;">新增宣传信息</span>
     </div>
-
+  
     <el-card style="width: 60%">
       <el-form :model="form" label-width="120px" ref="formRef">
         <!-- 宣传标题 -->
@@ -10,9 +10,16 @@
           <el-input v-model="form.ptitle" placeholder="请输入宣传标题"></el-input>
         </el-form-item>
   
-        <!-- 宣传类型 -->
+        <!-- 宣传类型 下拉框 -->
         <el-form-item label="宣传类型" prop="type" :rules="[{ required: true, message: '请输入宣传类型', trigger: 'blur' }]">
-          <el-input v-model="form.type" placeholder="请输入宣传类型"></el-input>
+          <el-select v-model="form.type" placeholder="请选择宣传类型">
+            <el-option label="农家院" value="农家院"></el-option>
+            <el-option label="自然风光秀丽" value="自然风光秀丽"></el-option>
+            <el-option label="古建筑" value="古建筑"></el-option>
+            <el-option label="土特产" value="土特产"></el-option>
+            <el-option label="特色小吃" value="特色小吃"></el-option>
+            <el-option label="民俗活动" value="民俗活动"></el-option>
+          </el-select>
         </el-form-item>
   
         <!-- 宣传描述 -->
@@ -57,7 +64,6 @@
         </el-form-item>
       </el-form>
     </el-card>
-    
   </template>
   
   <script setup>
@@ -112,42 +118,41 @@
   
   // 提交表单
   const submitForm = async () => {
-  const { ptitle, type, pdesc, provinceName, cityName, townName, files } = form.value;
-  if (!ptitle || !type || !pdesc || !provinceName || !cityName || !townName || files.length === 0) {
-    ElNotification.error({ title: '错误', message: '请完整填写所有必填项' });
-    return;
-  }
-
-  try {
-    const formData = new FormData();
-    formData.append('ptitle', ptitle);
-    formData.append('type', type);
-    formData.append('pdesc', pdesc);
-    formData.append('provinceName', provinceName);
-    formData.append('cityName', cityName);
-    formData.append('townName', townName);
-    formData.append('puserName', localStorage.getItem('uname')); // 假设“Zhiend”为发布用户名
-
-    // 通过 FormData 正确地上传文件
-    files.forEach(file => formData.append('files', file.raw));
-
-    const response = await axios.post('/town-advocacy-info/save', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-
-    if (response.data.success) {
-      ElNotification.success({ title: '成功', message: '宣传信息已保存' });
-    
-    } else {
-      ElNotification.error({ title: '错误', message: response.data.msg || '保存失败' });
+    const { ptitle, type, pdesc, provinceName, cityName, townName, files } = form.value;
+    if (!ptitle || !type || !pdesc || !provinceName || !cityName || !townName || files.length === 0) {
+      ElNotification.error({ title: '错误', message: '请完整填写所有必填项' });
+      return;
     }
-  } catch (error) {
-    ElNotification.error({ title: '错误', message: '提交失败，请稍后重试' });
-  }
-};
-
+  
+    try {
+      const formData = new FormData();
+      formData.append('ptitle', ptitle);
+      formData.append('type', type);
+      formData.append('pdesc', pdesc);
+      formData.append('provinceName', provinceName);
+      formData.append('cityName', cityName);
+      formData.append('townName', townName);
+      formData.append('puserName', localStorage.getItem('uname')); // 假设“Zhiend”为发布用户名
+  
+      // 通过 FormData 正确地上传文件
+      files.forEach(file => formData.append('files', file.raw));
+  
+      const response = await axios.post('/town-advocacy-info/save', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+  
+      if (response.data.success) {
+        ElNotification.success({ title: '成功', message: '宣传信息已保存' });
+       
+      } else {
+        ElNotification.error({ title: '错误', message: response.data.msg || '保存失败' });
+      }
+    } catch (error) {
+      ElNotification.error({ title: '错误', message: '提交失败，请稍后重试' });
+    }
+  };
   
   // 重置表单
   const resetForm = () => {
