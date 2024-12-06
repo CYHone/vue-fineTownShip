@@ -37,6 +37,11 @@ const router = createRouter({
           name: 'advocacyInfo',
           component: () => import('../views/components/advocacyInfo.vue')
          },
+         {
+          path: '/addAdvocacyInfo',
+          name: 'addAdvocacyInfo',
+          component: () => import('../views/components/addAdvocacyInfo.vue')
+         },
       ]
     }
   ],

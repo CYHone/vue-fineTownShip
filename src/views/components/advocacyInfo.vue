@@ -1,6 +1,9 @@
 <template>
   <div>
     <span style="font-size: 30px; font-weight: bold;">宣传信息</span>
+  </div>
+
+    <el-button type="success"  size="mini" @click="add()">新增宣传信息</el-button>
 
     <el-table :data="projects" style="width: 100%">
       <el-table-column label="标题" prop="ptitle" width="130"></el-table-column>
@@ -80,7 +83,7 @@
         <el-button type="primary" @click="confirmUpdate">更新</el-button>
       </span>
     </el-dialog>
-  </div>
+ 
 </template>
 
 <script>
@@ -88,6 +91,8 @@ import { ref, onMounted } from "vue";
 import axios from "@/utils/axios-config";
 import { ElNotification } from "element-plus";
 import { getImageUrl } from "@/utils/url-utils";
+import { useRouter } from 'vue-router'
+  
 
 export default {
   setup() {
@@ -97,6 +102,7 @@ export default {
     const currentPage = ref(1);
     const dialogUpdateVisible = ref(false);
     const updateForm = ref({}); // 存储更新数据
+    const router = useRouter()
 
     // 获取表格数据
     const fetchData = async (page = 1) => {
@@ -201,7 +207,7 @@ export default {
         const response = await axios.delete(`/town-advocacy-info/delete`, {
           params: { id: pid }, // 将 pid 改为 id 传递
         });
-        
+
         if (response.data.success) {
           ElNotification.success({ title: "成功", message: "删除成功！" });
           fetchData(currentPage.value); // 刷新数据
@@ -222,6 +228,10 @@ export default {
       fetchData(1);
     };
 
+    const add = () => {
+      router.push('/addAdvocacyInfo')
+    }
+
     onMounted(() => {
       fetchData();
     });
@@ -239,6 +249,7 @@ export default {
       handleDelete,
       handleSizeChange,
       getImageUrl,
+      add,
     };
   },
 };
