@@ -1,6 +1,6 @@
 <template>
     <div>
-      <span style="font-size: 30px; font-weight: bold; padding-right: 50px;">助力信息待处理</span>
+      <span style="font-size: 30px; font-weight: bold; padding-right: 50px;">助力信息</span>
       <el-table :data="supportList" style="width: 100%">
         <el-table-column prop="stitle" label="助力标题"  width="150"></el-table-column>
         <el-table-column prop="suserName" label="助力用户名"  width="100"></el-table-column>

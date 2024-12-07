@@ -14,27 +14,24 @@
           
           <router-link to="/advocacyInfo">
             <el-menu-item index="1" class="menu-item-centered">
-              <span style="color: #ffffff">宣传信息</span>
+              <span style="color: #ffffff">我宣传</span>
             </el-menu-item>
           </router-link>
-
           <router-link to="/queryAdvocacyInfo">
             <el-menu-item index="2" class="menu-item-centered">
-              <span style="color: #ffffff">查询信息</span>
-            </el-menu-item>
-          </router-link>
-          <router-link to="/querySupport">
-            <el-menu-item index="3" class="menu-item-centered">
-              <span style="color: #ffffff">助力查询</span>
+              <span style="color: #ffffff">宣传查询</span>
             </el-menu-item>
           </router-link>
           <router-link to="/queryWaitHandle">
             <el-menu-item index="3" class="menu-item-centered">
-              <span style="color: #ffffff">助力待处理</span>
+              <span style="color: #ffffff">我助力</span>
             </el-menu-item>
           </router-link>
-
-
+          <router-link to="/querySupport">
+            <el-menu-item index="4" class="menu-item-centered">
+              <span style="color: #ffffff">助力查询</span>
+            </el-menu-item>
+          </router-link>
           <router-link to="/usersManage">
             <el-menu-item index="9" class="menu-item-centered">
               <span style="color: #ffffff">个人信息</span>
