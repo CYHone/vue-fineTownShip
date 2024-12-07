@@ -1,6 +1,8 @@
 <template>
     <div>
       <span style="font-size: 30px; font-weight: bold; padding-right: 50px;">助力信息</span>
+      <el-button  type="success" size="mini" @click="add">新增助力信息</el-button>
+  
       <el-table :data="supportList" style="width: 100%">
         <el-table-column prop="stitle" label="助力标题"  width="150"></el-table-column>
         <el-table-column prop="suserName" label="助力用户名"  width="100"></el-table-column>
@@ -41,6 +43,8 @@
   import axios from '@/utils/axios-config';
   import { ElNotification } from 'element-plus';
   import { getImageUrl } from "@/utils/url-utils";
+  import { useRouter } from 'vue-router';
+  const router = useRouter();
   
   const supportList = ref([]);
   
@@ -94,6 +98,9 @@
       title: '成功',
       message: `处理了助力信息: ${row.stitle}`,
     });
+  };
+  const add = () => {
+    router.push('/addSupport');
   };
   </script>
   

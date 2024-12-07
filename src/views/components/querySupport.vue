@@ -1,7 +1,7 @@
 <template>
     <div>
       <span style="font-size: 30px; font-weight: bold; padding-right: 50px;">查询助力信息</span>
-  
+            
       <el-form :model="queryForm" label-width="120px" ref="formRef" class="query-form">
         <el-row>
           <el-col :span="6">

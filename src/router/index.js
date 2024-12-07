@@ -57,7 +57,12 @@ const router = createRouter({
           name: 'queryWaitHandle',
           component: () => import('../views/components/queryWaitHandle.vue')
          },
-      ]
+         {
+          path: '/addSupport',
+          name: 'addSupport',
+          component: () => import('../views/components/addSupport.vue')
+         },
+        ]
     }
   ],
 })
