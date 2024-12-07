@@ -2,6 +2,7 @@
   <div>
     <span style="font-size: 30px; font-weight: bold; padding-right: 50px;">宣传信息</span>
     <el-button  type="success" size="mini" @click="add">新增宣传信息</el-button>
+    <el-button  type="primary" size="mini" @click="change">切换为列表样式</el-button>
   </div>
 
   <el-card :body-style="{ padding: '20px', height: '100%' }" style="width: 100%;
@@ -291,6 +292,10 @@ const handleSizeChange = (size) => {
 // Navigate to the add page
 const add = () => {
   router.push('/addAdvocacyInfo');
+};
+
+const change = () => {
+  router.push('/advocacyInfoList');
 };
 
 onMounted(() => {

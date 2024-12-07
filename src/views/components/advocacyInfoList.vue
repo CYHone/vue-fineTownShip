@@ -2,50 +2,57 @@
   <div>
     <span style="font-size: 30px; font-weight: bold; padding-right: 50px;">宣传信息</span>
     <el-button  type="success" size="mini" @click="add">新增宣传信息</el-button>
+    <el-button  type="primary" size="mini" @click="change">切换为空间样式</el-button>
   </div>
 
-  <el-card :body-style="{ padding: '20px', height: '100%' }" style="width: 100%;
-   max-width: 800px; margin: 20px auto; height: 550px; overflow-y: auto;">
-  <el-row v-for="item in projects" :key="item.pid" class="post-container" style="margin-bottom: 20px;">
-      <!-- 标题 -->
-      <el-col :span="24">
-        <h3>标题：{{ item.ptitle }} 类型：{{ item.type }} 
-          地点：{{ item.provinceName }} - {{ item.cityName }} - {{ item.townName }}</h3>
-      </el-col>
-      
-      <!-- 描述 -->
-      <el-col :span="24">
-        <p>描述：{{ item.pdesc }}</p>
-      </el-col>
-
-      <!-- 图片/视频展示 -->
-      <el-col :span="24" class="media-container">
-        <div v-if="isImage(item.pfileList)">
-          <img :src="getFileUrl(item.pfileList)" alt="宣传图片" class="media" />
+  <el-table :data="projects" style="width: 100%">
+    <el-table-column label="标题" prop="ptitle" width="130"></el-table-column>
+    <el-table-column label="类型" prop="type" width="100"></el-table-column>
+    <el-table-column label="地点" width="200">
+      <template #default="scope">
+        {{ scope.row.provinceName }} - {{ scope.row.cityName }} - {{ scope.row.townName }}
+      </template>
+    </el-table-column>
+    <el-table-column label="描述" prop="pdesc" width="200"></el-table-column>
+    <el-table-column label="图片" width="200">
+      <template #default="scope">
+        <div v-if="isImage(scope.row.pfileList)">
+          <img
+            :src="getFileUrl(scope.row.pfileList)"
+            alt="宣传图片"
+            style="width: 100px; height: auto;"
+          />
         </div>
-        <div v-else-if="isVideo(item.pfileList)">
-          <video :src="getFileUrl(item.pfileList)" controls class="media"></video>
+        <div v-else-if="isVideo(scope.row.pfileList)">
+          <video
+            :src="getFileUrl(scope.row.pfileList)"
+            controls
+            style="width: 100px; height: auto;"
+          ></video>
         </div>
         <div v-else>
           <span>文件格式不支持</span>
         </div>
-      </el-col>
+      </template>
+    </el-table-column>
+    <el-table-column label="开始时间" width="160">
+      <template #default="scope">
+        {{ new Date(scope.row.pbeginDate).toLocaleString() }}
+      </template>
+    </el-table-column>
+    <el-table-column label="更新时间" width="160">
+      <template #default="scope">
+        {{ new Date(scope.row.pupdateDate).toLocaleString() }}
+      </template>
+    </el-table-column>
+    <el-table-column label="操作" width="200">
+      <template #default="scope">
+        <el-button type="success" plain size="mini" @click="openUpdateDialog(scope.row.pid)">更新</el-button>
+        <el-button type="danger" plain size="mini" @click="handleDelete(scope.row.pid)">删除</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
 
-      <!-- 时间 -->
-      <el-col :span="12">
-        <p>开始时间: {{ new Date(item.pbeginDate).toLocaleString() }}</p>
-      </el-col>
-      <el-col :span="12">
-        <p>更新时间: {{ new Date(item.pupdateDate).toLocaleString() }}</p>
-      </el-col>
-
-      <!-- 操作按钮 -->
-      <el-col :span="24" class="operation-buttons">
-        <el-button type="success" plain size="mini" @click="openUpdateDialog(item.pid)">更新</el-button>
-        <el-button type="danger" plain size="mini" @click="handleDelete(item.pid)">删除</el-button>
-      </el-col>
-    </el-row>
-</el-card>
 
 
 
@@ -293,45 +300,12 @@ const add = () => {
   router.push('/addAdvocacyInfo');
 };
 
+const change = () => {
+  router.push('/advocacyInfo');
+};
+
 onMounted(() => {
   fetchData();
 });
 </script>
-<style scoped>
-.post-container {
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
 
-h3 {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-p {
-  font-size: 14px;
-  color: #666;
-}
-
-.media-container {
-  text-align: center;
-  margin: 10px 0;
-}
-
-.media {
-  width: 100%;
-  max-width: 400px;
-  height: auto;
-}
-
-.operation-buttons {
-  text-align: right;
-  margin-top: 10px;
-}
-
-.operation-buttons .el-button {
-  margin-left: 10px;
-}
-</style>
