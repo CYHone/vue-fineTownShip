@@ -3,41 +3,56 @@
     <span style="font-size: 30px; font-weight: bold; padding-right: 50px;">宣传信息</span>
     <el-button  type="success" size="mini" @click="add">新增宣传信息</el-button>
   </div>
-    <el-table :data="projects" style="width: 100%">
-      <el-table-column label="标题" prop="ptitle" width="130"></el-table-column>
-      <el-table-column label="类型" prop="type" width="100"></el-table-column>
-      <el-table-column label="地点" width="200">
-        <template #default="scope">
-          {{ scope.row.provinceName }} - {{ scope.row.cityName }} - {{ scope.row.townName }}
-        </template>
-      </el-table-column>
-      <el-table-column label="描述" prop="pdesc" width="200"></el-table-column>
-      <el-table-column label="图片" width="200">
-        <template #default="scope">
+
+
+  <el-table :data="projects" style="width: 100%">
+    <el-table-column label="标题" prop="ptitle" width="130"></el-table-column>
+    <el-table-column label="类型" prop="type" width="100"></el-table-column>
+    <el-table-column label="地点" width="200">
+      <template #default="scope">
+        {{ scope.row.provinceName }} - {{ scope.row.cityName }} - {{ scope.row.townName }}
+      </template>
+    </el-table-column>
+    <el-table-column label="描述" prop="pdesc" width="200"></el-table-column>
+    <el-table-column label="图片" width="200">
+      <template #default="scope">
+        <div v-if="isImage(scope.row.pfileList)">
           <img
-            :src="getImageUrl(scope.row.pfileList)"
+            :src="getFileUrl(scope.row.pfileList)"
             alt="宣传图片"
             style="width: 100px; height: auto;"
           />
-        </template>
-      </el-table-column>
-      <el-table-column label="开始时间" width="160">
-        <template #default="scope">
-          {{ new Date(scope.row.pbeginDate).toLocaleString() }}
-        </template>
-      </el-table-column>
-      <el-table-column label="更新时间" width="160">
-        <template #default="scope">
-          {{ new Date(scope.row.pupdateDate).toLocaleString() }}
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" width="200">
-        <template #default="scope">
-          <el-button type="success" plain size="mini" @click="openUpdateDialog(scope.row.pid)">更新</el-button>
-          <el-button type="danger" plain size="mini" @click="handleDelete(scope.row.pid)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+        </div>
+        <div v-else-if="isVideo(scope.row.pfileList)">
+          <video
+            :src="getFileUrl(scope.row.pfileList)"
+            controls
+            style="width: 100px; height: auto;"
+          ></video>
+        </div>
+        <div v-else>
+          <span>文件格式不支持</span>
+        </div>
+      </template>
+    </el-table-column>
+    <el-table-column label="开始时间" width="160">
+      <template #default="scope">
+        {{ new Date(scope.row.pbeginDate).toLocaleString() }}
+      </template>
+    </el-table-column>
+    <el-table-column label="更新时间" width="160">
+      <template #default="scope">
+        {{ new Date(scope.row.pupdateDate).toLocaleString() }}
+      </template>
+    </el-table-column>
+    <el-table-column label="操作" width="200">
+      <template #default="scope">
+        <el-button type="success" plain size="mini" @click="openUpdateDialog(scope.row.pid)">更新</el-button>
+        <el-button type="danger" plain size="mini" @click="handleDelete(scope.row.pid)">删除</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
+
 
     <el-pagination
       background
@@ -105,7 +120,7 @@
 import { ref, onMounted } from "vue";
 import axios from "@/utils/axios-config";
 import { ElNotification } from "element-plus";
-import { getImageUrl } from "@/utils/url-utils";
+import { getImageUrl, getFileUrl } from "@/utils/url-utils";
 import { useRouter } from 'vue-router';
 
 const projects = ref([]);
@@ -115,6 +130,22 @@ const currentPage = ref(1);
 const dialogUpdateVisible = ref(false);
 const updateForm = ref({});
 const router = useRouter();
+
+
+// 判断文件是否为图片
+const isImage = (fileName) => {
+  const imageFormats = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
+  const fileExtension = fileName.split('.').pop().toLowerCase();
+  return imageFormats.includes(fileExtension);
+};
+
+// 判断文件是否为视频
+const isVideo = (fileName) => {
+  const videoFormats = ['mp4', 'avi', 'mov'];
+  const fileExtension = fileName.split('.').pop().toLowerCase();
+  return videoFormats.includes(fileExtension);
+};
+
 
 // Fetch table data
 const fetchData = async (page = 1) => {
