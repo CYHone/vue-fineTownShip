@@ -5,13 +5,13 @@
   </div>
     <el-table :data="projects" style="width: 100%">
       <el-table-column label="标题" prop="ptitle" width="130"></el-table-column>
-      <el-table-column label="类型" prop="type" width="130"></el-table-column>
+      <el-table-column label="类型" prop="type" width="100"></el-table-column>
       <el-table-column label="地点" width="200">
         <template #default="scope">
           {{ scope.row.provinceName }} - {{ scope.row.cityName }} - {{ scope.row.townName }}
         </template>
       </el-table-column>
-      <el-table-column label="描述" prop="pdesc" width="300"></el-table-column>
+      <el-table-column label="描述" prop="pdesc" width="200"></el-table-column>
       <el-table-column label="图片" width="200">
         <template #default="scope">
           <img
@@ -21,12 +21,12 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="开始时间" width="180">
+      <el-table-column label="开始时间" width="160">
         <template #default="scope">
           {{ new Date(scope.row.pbeginDate).toLocaleString() }}
         </template>
       </el-table-column>
-      <el-table-column label="更新时间" width="180">
+      <el-table-column label="更新时间" width="160">
         <template #default="scope">
           {{ new Date(scope.row.pupdateDate).toLocaleString() }}
         </template>
@@ -74,6 +74,23 @@
             style="width: 100px; height: auto;"
           />
         </el-form-item>
+                <!-- 文件上传 -->
+        <el-form-item label="上传图片" prop="files" :rules="[{ required: true, message: '请上传宣传图片', trigger: 'blur' }]">
+          <el-upload
+            action=""
+            :on-success="handleFileSuccess"
+            :on-remove="handleFileRemove"
+            multiple
+            :limit="5"
+            :file-list="fileList"
+            :before-upload="beforeUpload"
+            :http-request="dummyRequest"
+            :show-file-list="true"
+          >
+            <el-button slot="trigger" size="small" type="primary">点击上传</el-button>
+          </el-upload>
+        </el-form-item>
+
       </el-form>
 
       <span slot="footer" class="dialog-footer">
@@ -97,8 +114,6 @@ const pageSize = ref(5);
 const currentPage = ref(1);
 const dialogUpdateVisible = ref(false);
 const updateForm = ref({});
-const fileList = ref([]); // Store uploaded files
-
 const router = useRouter();
 
 // Fetch table data
@@ -133,7 +148,76 @@ const fetchData = async (page = 1) => {
   }
 };
 
-// Open the update dialog
+const form = ref({
+    files: []
+  });
+
+  const fileList = ref([]); 
+  // 假的上传请求（因为后端接口需要文件）
+  const dummyRequest = (options) => {
+    setTimeout(() => {
+      options.onSuccess();
+    }, 1000);
+  };
+  
+  // 文件上传前校验
+  const beforeUpload = (file) => {
+    const isFileSizeValid = file.size / 1024 / 1024 < 10; // 文件大小不超过10MB
+    if (!isFileSizeValid) {
+      ElNotification.error({ title: '文件大小超出限制', message: '每个文件最大为 10MB' });
+    }
+    return isFileSizeValid;
+  };
+  
+  // 文件上传成功的回调
+  const handleFileSuccess = (response, file) => {
+    fileList.value.push(file);
+    form.value.files = fileList.value;
+  };
+  
+  // 文件移除的回调
+  const handleFileRemove = (file) => {
+    const index = fileList.value.indexOf(file);
+    if (index !== -1) {
+      fileList.value.splice(index, 1);
+    }
+  };
+  const confirmUpdate = async () => {
+  try {
+    const formData = new FormData();
+      formData.append('ptitle', updateForm.value.ptitle);
+      formData.append('type', updateForm.value.type);
+      formData.append('pdesc', updateForm.value.pdesc);
+      formData.append('provinceName', updateForm.value.provinceName);
+      formData.append('cityName', updateForm.value.cityName);
+      formData.append('townName', updateForm.value.townName);
+      formData.append('puserName', localStorage.getItem('uname')); 
+      formData.append('pid', updateForm.value.pid);
+      const files = fileList.value;  // 确保 files 是期望的数组
+      if( files.length !== 0 ){
+        files.forEach(file => formData.append('files', file.raw));
+      }
+
+    const response = await axios.post("/town-advocacy-info/save", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    if (response.data.success) {
+      ElNotification.success({ title: "成功", message: "更新成功！" });
+      dialogUpdateVisible.value = false;
+      fetchData(currentPage.value); // Refresh data
+    } else {
+      ElNotification.error({
+        title: "错误",
+        message: response.data.msg || "更新失败，请稍后重试。",
+      });
+    }
+  } catch (error) {
+    ElNotification.error({ title: "错误", message: "请稍后重试。" });
+  }
+};
+
+
 const openUpdateDialog = async (pid) => {
   try {
     const response = await axios.get(`/town-advocacy-info/queryByPid`, { params: { pid } });
@@ -151,34 +235,10 @@ const openUpdateDialog = async (pid) => {
   }
 };
 
-// Confirm the update
-const confirmUpdate = async () => {
-  try {
-    const formData = new FormData();
-    Object.keys(updateForm.value).forEach((key) => {
-      formData.append(key, updateForm.value[key]);
-    });
 
-    const response = await axios.post("/town-advocacy-info/save", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
 
-    if (response.data.success) {
-      ElNotification.success({ title: "成功", message: "更新成功！" });
-      dialogUpdateVisible.value = false;
-      fetchData(currentPage.value); // Refresh data
-    } else {
-      ElNotification.error({
-        title: "错误",
-        message: response.data.msg || "更新失败，请稍后重试。",
-      });
-    }
-  } catch (error) {
-    ElNotification.error({ title: "错误", message: "网络请求失败，请稍后重试。" });
-  }
-};
 
-// Handle delete action
+
 const handleDelete = async (pid) => {
   try {
     const response = await axios.delete(`/town-advocacy-info/delete`, { params: { id: pid } });
