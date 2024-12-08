@@ -134,7 +134,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogAddVisible = false">关闭</el-button>
-        <el-button type="primary" @click="confirmAdd">更新</el-button>
+        <el-button type="primary" @click="confirmAdd">新增</el-button>
       </span>
     </el-dialog>
 
