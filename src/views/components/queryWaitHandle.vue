@@ -1,8 +1,7 @@
 <template>
     <div>
       <span style="font-size: 30px; font-weight: bold; padding-right: 50px;">助力信息</span>
-      <el-button  type="success" size="mini" @click="add">新增助力信息</el-button>
-  
+    
       <el-table :data="supportList" style="width: 100%">
         <el-table-column prop="stitle" label="助力标题"  width="150"></el-table-column>
         <el-table-column prop="suserName" label="助力用户名"  width="100"></el-table-column>
@@ -28,9 +27,10 @@
                 {{ new Date(scope.row.updateDate).toLocaleString() }}
                 </template>
             </el-table-column>
-        <el-table-column label="操作" width="150">
+        <el-table-column label="操作" width="200">
           <template #default="{ row }">
-            <el-button @click="handleAction(row)" type="primary">处理</el-button>
+            <el-button @click="handleUpdate(row)" type="success">更新</el-button>
+            <el-button @click="handleDelete(row)" type="danger">删除</el-button>
           </template>
         </el-table-column>
       
