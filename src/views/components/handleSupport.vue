@@ -30,6 +30,12 @@
             {{ new Date(scope.row.updateDate).toLocaleString() }}
           </template>
         </el-table-column>
+        <el-table-column label="操作" width="200">
+              <template #default="scope">
+                <el-button type="success" plain size="mini" @click="accept(scope.row)">接受</el-button>
+                <el-button type="danger" plain size="mini" @click="refuse(scope.row)">拒绝</el-button>
+              </template>
+            </el-table-column>
       </el-table>
   
       <!-- 分页 -->
@@ -48,6 +54,32 @@
   import { ElNotification } from 'element-plus';
   import axios from "@/utils/axios-config";
   import { getImageUrl } from "@/utils/url-utils";
+
+
+  const refuse = async (row) => {
+  const sid = row.sid;  // 获取sid
+
+  try {
+    // 通过查询参数传递sid
+    const response = await axios.post('/town-support/refuse', null, { params: { sid: sid } });
+
+    if (response.data.success) {
+      ElNotification.success({ title: "成功", message: "拒绝成功！" });
+      fetchData();
+    } else {
+      ElNotification.error({
+        title: "错误",
+        message: response.data.msg || "拒绝失败，请稍后重试。",
+      });
+    }
+  } catch (error) {
+    ElNotification.error({ title: "错误", message: "拒绝失败，请稍后重试。" });
+  }
+};
+
+
+
+
   
   // 分页信息
   const pagination = ref({
