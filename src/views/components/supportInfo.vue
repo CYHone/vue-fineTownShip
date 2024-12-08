@@ -50,15 +50,15 @@
   
   onMounted(async () => {
         try {
-            const puserName = localStorage.getItem('uname'); // 获取 localStorage 中的用户名
+            const suserName = localStorage.getItem('uname'); // 获取 localStorage 中的用户名
 
-            if (!puserName) {
+            if (!suserName) {
             ElNotification.error({ title: '错误', message: '未找到用户信息，请重新登录' });
             return;
             }
 
-            const response = await axios.post('/town-support/queryWaitHandle', 
-            `pageNo=1&pageSize=5&puserName=${puserName}`, {
+            const response = await axios.post('/town-support/queryByName', 
+            `pageNo=1&pageSize=5&suserName=${suserName}`, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',  // 确保传递的是 x-www-form-urlencoded 格式
             }

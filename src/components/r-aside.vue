@@ -21,7 +21,7 @@
               <span style="color: #ffffff">宣传查询</span>
             </el-menu-item>
           </router-link>
-          <router-link to="/queryWaitHandle">
+          <router-link to="/supportInfo">
             <el-menu-item index="3" class="menu-item-centered">
               <span style="color: #ffffff">我助力</span>
             </el-menu-item>
