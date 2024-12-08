@@ -78,15 +78,15 @@
           <el-input v-model="updateForm.cityName" placeholder="城市"></el-input>
           <el-input v-model="updateForm.townName" placeholder="乡镇"></el-input>
         </el-form-item>
-        <el-form-item label="图片">
+        <el-form-item label="文件">
           <img
             :src="getImageUrl(updateForm.pfileList)"
-            alt="宣传图片"
+            alt="宣传文件"
             style="width: 100px; height: auto;"
           />
         </el-form-item>
                 <!-- 文件上传 -->
-        <el-form-item label="上传图片" prop="files" :rules="[{ required: true, message: '请上传宣传图片', trigger: 'blur' }]">
+        <el-form-item label="上传文件" prop="files" :rules="[{ required: true, message: '请上传宣传文件', trigger: 'blur' }]">
           <el-upload
             action=""
             :on-success="handleFileSuccess"

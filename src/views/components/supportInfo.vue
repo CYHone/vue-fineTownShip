@@ -70,27 +70,13 @@
         <el-form-item label="助力描述">
           <el-input v-model="updateForm.sdesc"></el-input>
         </el-form-item>
-        <el-table-column label="文件" width="200">
-            <template #default="scope">
-              <div v-if="isImage(scope.row.sfileList)">
-                <img
-                  :src="getFileUrl(scope.row.sfileList)"
-                  alt="宣传图片"
-                  style="width: 100px; height: auto;"
-                />
-              </div>
-              <div v-else-if="isVideo(scope.row.sfileList)">
-                <video
-                  :src="getFileUrl(scope.row.sfileList)"
-                  controls
-                  style="width: 100px; height: auto;"
-                ></video>
-              </div>
-              <div v-else>
-                <span>文件格式不支持</span>
-              </div>
-            </template>
-          </el-table-column>
+        <el-form-item label="图片">
+          <img
+            :src="getImageUrl(updateForm.sfileList)"
+            alt="宣传图片"
+            style="width: 100px; height: auto;"
+          />
+        </el-form-item>
                 <!-- 文件上传 -->
         <el-form-item label="上传文件" prop="files" :rules="[{ required: true, message: '请上传宣传文件', trigger: 'blur' }]">
           <el-upload
