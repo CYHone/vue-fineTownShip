@@ -67,15 +67,29 @@
             </template>
         </el-table-column>
         <el-table-column prop="pdesc" label="宣传描述" width="250"></el-table-column>
-            <el-table-column label="图片" width="200">
+
+        <el-table-column label="图片" width="200">
             <template #default="scope">
-            <img
-                :src="getImageUrl(scope.row.pfileList)"
-                alt="宣传图片"
-                style="width: 100px; height: auto;"
-            />
+              <div v-if="isImage(scope.row.pfileList)">
+                <img
+                  :src="getFileUrl(scope.row.pfileList)"
+                  alt="宣传图片"
+                  style="width: 100px; height: auto;"
+                />
+              </div>
+              <div v-else-if="isVideo(scope.row.pfileList)">
+                <video
+                  :src="getFileUrl(scope.row.pfileList)"
+                  controls
+                  style="width: 100px; height: auto;"
+                ></video>
+              </div>
+              <div v-else>
+                <span>文件格式不支持</span>
+              </div>
             </template>
-        </el-table-column>
+          </el-table-column>
+
         <el-table-column label="开始时间" width="180">
             <template #default="scope">
             {{ new Date(scope.row.pbeginDate).toLocaleString() }}
@@ -144,7 +158,22 @@
   import { ref } from 'vue';
   import axios from '@/utils/axios-config';
   import { ElNotification } from 'element-plus';
-  import { getImageUrl } from "@/utils/url-utils";
+  import { getImageUrl, getFileUrl } from "@/utils/url-utils";
+
+  // 判断文件是否为图片
+const isImage = (fileName) => {
+  const imageFormats = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
+  const fileExtension = fileName.split('.').pop().toLowerCase();
+  return imageFormats.includes(fileExtension);
+};
+
+// 判断文件是否为视频
+const isVideo = (fileName) => {
+  const videoFormats = ['mp4', 'avi', 'mov'];
+  const fileExtension = fileName.split('.').pop().toLowerCase();
+  return videoFormats.includes(fileExtension);
+};
+
   
   const queryForm = ref({
     cityName: '',
