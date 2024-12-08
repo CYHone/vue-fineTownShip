@@ -32,7 +32,7 @@
         </el-table-column>
         <el-table-column label="操作" width="200">
               <template #default="scope">
-                <el-button type="success" plain size="mini" @click="accept(scope.row)">接受</el-button>
+                <el-button type="success" plain size="mini" @click="openDialog(scope.row)">接受</el-button>
                 <el-button type="danger" plain size="mini" @click="refuse(scope.row)">拒绝</el-button>
               </template>
             </el-table-column>
@@ -46,6 +46,21 @@
         :total="pagination.totalNum"
         @current-change="handlePageChange"
       ></el-pagination>
+
+
+      <!-- 弹出框 -->
+      <el-dialog v-model="dialogVisible" title="接受宣传助力" @close="resetForm">
+
+      <el-form :model="form" label-width="100px">
+        <el-form-item label="备注" :label-width="'70px'">
+          <el-input v-model="form.remark" type="text" placeholder="请输入备注"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="accept">确定</el-button>
+      </span>
+    </el-dialog>
     </div>
   </template>
   
@@ -54,6 +69,54 @@
   import { ElNotification } from 'element-plus';
   import axios from "@/utils/axios-config";
   import { getImageUrl } from "@/utils/url-utils";
+
+
+  const dialogVisible = ref(false);  // 控制弹窗显示
+
+  const form = ref({
+    sid: null,   // sid
+    remark: ''   // remark
+    });
+
+    // 打开弹窗，并设置当前的 sid
+    const openDialog = (row) => {
+        form.value.sid = row.sid;  // 获取当前行的 sid
+        dialogVisible.value = true;  // 显示弹窗
+        };
+
+
+// 清空表单数据
+const resetForm = () => {
+  form.value.remark = '';
+};
+
+// 提交表单，发送请求
+const accept = async () => {
+  try {
+    const response = await axios.post('/town-support/accept', null, {
+      params: {
+        remark: form.value.remark,
+        sid: form.value.sid
+      }
+    });
+
+    if (response.data.success) {
+      ElNotification.success({ title: "成功", message: "接受成功！" });
+      dialogVisible.value = false;  // 关闭弹窗
+      // 刷新数据（假设你有一个 fetchData 方法来重新加载数据）
+      fetchData();  
+    } else {
+      ElNotification.error({
+        title: "错误",
+        message: response.data.msg || "接受失败，请稍后重试。",
+      });
+    }
+  } catch (error) {
+    ElNotification.error({ title: "错误", message: "请求失败，请稍后重试。" });
+  }
+};
+
+
 
 
   const refuse = async (row) => {
@@ -159,5 +222,8 @@
   .el-table {
     margin-bottom: 20px;
   }
+  .el-dialog {
+  z-index: 9999; /* 确保弹窗显示在最前面 */
+}
   </style>
   
