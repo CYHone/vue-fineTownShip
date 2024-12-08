@@ -66,6 +66,11 @@ const router = createRouter({
           path: '/advocacyInfoList',
           name: 'advocacyInfoList',
           component: () => import('../views/components/advocacyInfoList.vue')
+         },
+         {
+          path: '/handleSupport',
+          name: 'handleSupport',
+          component: () => import('../views/components/handleSupport.vue')
          }
         ]
     }

@@ -11,7 +11,6 @@
               <span style="color: #ffffff">主页</span>
             </el-menu-item>
           </router-link>
-          
           <router-link to="/advocacyInfo">
             <el-menu-item index="1" class="menu-item-centered">
               <span style="color: #ffffff">我宣传</span>
@@ -27,8 +26,13 @@
               <span style="color: #ffffff">我助力</span>
             </el-menu-item>
           </router-link>
-          <router-link to="/querySupport">
+          <router-link to="/handleSupport">
             <el-menu-item index="4" class="menu-item-centered">
+              <span style="color: #ffffff">处理助力</span>
+            </el-menu-item>
+          </router-link>
+          <router-link to="/querySupport">
+            <el-menu-item index="5" class="menu-item-centered">
               <span style="color: #ffffff">助力查询</span>
             </el-menu-item>
           </router-link>

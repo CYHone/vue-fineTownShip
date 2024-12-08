@@ -59,9 +59,9 @@
   
       <!-- 查询结果表格 -->
       <el-table :data="advocacyList" style="width: 100%" v-if="advocacyList.length > 0">
-        <el-table-column prop="ptitle" label="宣传标题" width="150"></el-table-column>
+        <el-table-column prop="ptitle" label="宣传标题" width="100"></el-table-column>
         <el-table-column prop="type" label="宣传类型" width="100"></el-table-column>
-        <el-table-column label="地点" width="200">
+        <el-table-column label="地点" width="180">
             <template #default="scope">
             {{ scope.row.provinceName }} - {{ scope.row.cityName }} - {{ scope.row.townName }}
             </template>
@@ -86,6 +86,11 @@
             {{ new Date(scope.row.pupdateDate).toLocaleString() }}
             </template>
         </el-table-column>
+        <el-table-column label="操作" width="150">
+              <template #default="{ row }">
+                <el-button @click="handleAction(row)" type="primary">我助力</el-button>
+              </template>
+            </el-table-column>
       </el-table>
   
       <el-pagination
