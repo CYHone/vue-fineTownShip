@@ -101,6 +101,43 @@
         @current-change="handlePageChange"
       ></el-pagination>
     </div>
+
+
+        <!-- 新增对话框 -->
+    <el-dialog v-model="dialogAddVisible" title="新增助力" width="40%">
+      <el-form :model="addForm" label-width="120px">
+
+        <el-form-item label="标题">
+          <el-input v-model="addForm.stitle"></el-input>
+        </el-form-item>
+        <el-form-item label="助力描述">
+          <el-input v-model="addForm.sdesc"></el-input>
+        </el-form-item>
+                <!-- 文件上传 -->
+        <el-form-item label="上传文件" prop="files" :rules="[{ required: true, message: '请上传宣传文件', trigger: 'blur' }]">
+          <el-upload
+            action=""
+            :on-success="handleFileSuccess"
+            :on-remove="handleFileRemove"
+            multiple
+            :limit="5"
+            :file-list="fileList"
+            :before-upload="beforeUpload"
+            :http-request="dummyRequest"
+            :show-file-list="true"
+          >
+            <el-button slot="trigger" size="small" type="primary">点击上传</el-button>
+          </el-upload>
+        </el-form-item>
+
+      </el-form>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogAddVisible = false">关闭</el-button>
+        <el-button type="primary" @click="confirmAdd">更新</el-button>
+      </span>
+    </el-dialog>
+
   </template>
   
   <script setup>
@@ -125,6 +162,79 @@
     pageSize: 10,
     totalNum: 0,
   });
+
+  const dialogAddVisible = ref(false);
+  const addForm = ref({});
+
+  const form = ref({
+    files: []
+  });
+
+  const fileList = ref([]); 
+  // 假的上传请求（因为后端接口需要文件）
+  const dummyRequest = (options) => {
+    setTimeout(() => {
+      options.onSuccess();
+    }, 1000);
+  };
+  
+  // 文件上传前校验
+  const beforeUpload = (file) => {
+    const isFileSizeValid = file.size / 1024 / 1024 < 10; // 文件大小不超过10MB
+    if (!isFileSizeValid) {
+      ElNotification.error({ title: '文件大小超出限制', message: '每个文件最大为 10MB' });
+    }
+    return isFileSizeValid;
+  };
+  
+  // 文件上传成功的回调
+  const handleFileSuccess = (response, file) => {
+    fileList.value.push(file);
+    form.value.files = fileList.value;
+  };
+  
+  // 文件移除的回调
+  const handleFileRemove = (file) => {
+    const index = fileList.value.indexOf(file);
+    if (index !== -1) {
+      fileList.value.splice(index, 1);
+    }
+  };
+  const confirmAdd = async () => {
+  try {
+    const formData = new FormData();
+      formData.append('stitle', addForm.value.stitle);
+      formData.append('sdesc', addForm.value.sdesc);
+      formData.append('suserName', localStorage.getItem('uname')); 
+      formData.append('pid', localStorage.getItem('pid'));
+      const files = fileList.value;  // 确保 files 是期望的数组
+      if( files.length !== 0 ){
+        files.forEach(file => formData.append('files', file.raw));
+      }
+
+    const response = await axios.post("/town-support/add", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    if (response.data.success) {
+      ElNotification.success({ title: "成功", message: "助力成功！" });
+      dialogAddVisible.value = false;
+      fetchData(currentPage.value); // Refresh data
+    } else {
+      ElNotification.error({
+        title: "错误",
+        message: response.data.msg || "助力失败，请稍后重试。",
+      });
+    }
+  } catch (error) {
+    // ElNotification.error({ title: "错误", message: "请稍后重试。" });
+  }
+};
+
+const handleAction = (row) =>{
+  localStorage.setItem('pid', row.pid)
+  dialogAddVisible.value = true;
+}
   
   const searchAdvocacyInfo = async () => {
     try {
