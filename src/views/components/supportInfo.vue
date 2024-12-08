@@ -1,7 +1,9 @@
 <template>
     <div>
       <span style="font-size: 30px; font-weight: bold; padding-right: 50px;">助力信息</span>
-    
+      <el-card :body-style="{ padding: '10px', height: '100%' }" style="width: 100%;
+   max-width: 2000px; margin: 20px auto; height: 550px; overflow-y: auto;">
+
       <el-table :data="supportList" style="width: 100%">
         <el-table-column prop="stitle" label="助力标题"  width="150"></el-table-column>
         <el-table-column prop="suserName" label="助力用户名"  width="100"></el-table-column>
@@ -35,6 +37,8 @@
             </el-table-column>
       
       </el-table>
+
+      </el-card>
     </div>
 
             <!-- 更新对话框 -->
@@ -192,7 +196,7 @@ const fetchData  = async () => {
             }
 
             const response = await axios.post('/town-support/queryByName', 
-            `pageNo=1&pageSize=5&suserName=${suserName}`, {
+            `pageNo=1&pageSize=999&suserName=${suserName}`, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',  // 确保传递的是 x-www-form-urlencoded 格式
             }
