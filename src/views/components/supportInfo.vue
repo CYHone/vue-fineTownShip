@@ -10,15 +10,34 @@
         <el-table-column prop="sdesc" label="助力描述"  width="200"></el-table-column>
         <el-table-column prop="supportState" label="助力状态" width="100"
                         :formatter="formatSupportState"></el-table-column>
-        <el-table-column label="图片" width="200">
+
+
+
+        <el-table-column label="文件" width="200">
             <template #default="scope">
-            <img
-                :src="getImageUrl(scope.row.sfileList)"
-                alt="宣传图片"
-                style="width: 100px; height: auto;"
-            />
+              <div v-if="isImage(scope.row.sfileList)">
+                <img
+                  :src="getFileUrl(scope.row.sfileList)"
+                  alt="宣传图片"
+                  style="width: 100px; height: auto;"
+                />
+              </div>
+              <div v-else-if="isVideo(scope.row.sfileList)">
+                <video
+                  :src="getFileUrl(scope.row.sfileList)"
+                  controls
+                  style="width: 100px; height: auto;"
+                ></video>
+              </div>
+              <div v-else>
+                <span>文件格式不支持</span>
+              </div>
             </template>
-        </el-table-column>
+          </el-table-column>
+
+
+
+
             <el-table-column label="助力时间" width="180">
                 <template #default="scope">
                 {{ new Date(scope.row.supportDate).toLocaleString() }}
@@ -51,13 +70,27 @@
         <el-form-item label="助力描述">
           <el-input v-model="updateForm.sdesc"></el-input>
         </el-form-item>
-        <el-form-item label="图片">
-          <img
-            :src="getImageUrl(updateForm.sfileList)"
-            alt="宣传图片"
-            style="width: 100px; height: auto;"
-          />
-        </el-form-item>
+        <el-table-column label="文件" width="200">
+            <template #default="scope">
+              <div v-if="isImage(scope.row.sfileList)">
+                <img
+                  :src="getFileUrl(scope.row.sfileList)"
+                  alt="宣传图片"
+                  style="width: 100px; height: auto;"
+                />
+              </div>
+              <div v-else-if="isVideo(scope.row.sfileList)">
+                <video
+                  :src="getFileUrl(scope.row.sfileList)"
+                  controls
+                  style="width: 100px; height: auto;"
+                ></video>
+              </div>
+              <div v-else>
+                <span>文件格式不支持</span>
+              </div>
+            </template>
+          </el-table-column>
                 <!-- 文件上传 -->
         <el-form-item label="上传文件" prop="files" :rules="[{ required: true, message: '请上传宣传文件', trigger: 'blur' }]">
           <el-upload
@@ -90,9 +123,24 @@
   import { ref, onMounted } from 'vue';
   import axios from '@/utils/axios-config';
   import { ElNotification } from 'element-plus';
-  import { getImageUrl } from "@/utils/url-utils";
   import { useRouter } from 'vue-router';
   const router = useRouter();
+
+  import { getImageUrl, getFileUrl } from "@/utils/url-utils";
+
+  // 判断文件是否为图片
+  const isImage = (fileName) => {
+  const imageFormats = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
+  const fileExtension = fileName.split('.').pop().toLowerCase();
+  return imageFormats.includes(fileExtension);
+  };
+
+  // 判断文件是否为视频
+  const isVideo = (fileName) => {
+  const videoFormats = ['mp4', 'avi', 'mov'];
+  const fileExtension = fileName.split('.').pop().toLowerCase();
+  return videoFormats.includes(fileExtension);
+  };
   
   const supportList = ref([]);
   const dialogUpdateVisible = ref(false);

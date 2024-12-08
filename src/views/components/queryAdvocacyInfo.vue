@@ -68,7 +68,7 @@
         </el-table-column>
         <el-table-column prop="pdesc" label="宣传描述" width="250"></el-table-column>
 
-        <el-table-column label="图片" width="200">
+        <el-table-column label="文件" width="200">
             <template #default="scope">
               <div v-if="isImage(scope.row.pfileList)">
                 <img
